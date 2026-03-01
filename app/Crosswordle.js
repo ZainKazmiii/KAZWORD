@@ -5731,11 +5731,7 @@ className="mt-0 mb-2 font-semibold text-center translate-y-1"
 style={{ color: isPurpleBg ? "#ffffff" : "#374151", fontSize: `${Math.round(14 * uiScale)}px` }}
 
 >
-    
-	
-	Attempts: <span style={{ fontVariantNumeric: "tabular-nums" }}>{submissions}</span>
-	
-	
+    Attempts: <span className="tabular-nums">{submissions}</span>
   </div>
 </div>
 
@@ -6929,10 +6925,7 @@ style={{ marginTop: 0, fontSize: Math.round(14 * Math.max(1, uiScale)), fontWeig
 
 Attempts: <span style={{ fontVariantNumeric: "tabular-nums" }}>{submissions}</span>
 </div>
-
-{didWin && submissions > 0 && submissions < 20 && (
-
-
+{didWin && submissions < 20 && (
 <div style={{
 marginTop: Math.round(16 * Math.max(1, uiScale)),
 display: "flex",
@@ -6955,9 +6948,7 @@ try {
 const res = await fetch("/api/generate-token", {
 method: "POST",
 headers: { "Content-Type": "application/json" },
-
-body: JSON.stringify({ submissions: Number(submissions), puzzleNumber: Number(puzzleNumber) }),
-
+body: JSON.stringify({ submissions, puzzleNumber }),
 });
 const d = await res.json();
 if (d.token && d.sessionId) {
@@ -7189,6 +7180,7 @@ if (isMobile) {
     </div>
   );
 }
+
 
 
 

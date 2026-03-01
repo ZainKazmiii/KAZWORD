@@ -6932,7 +6932,7 @@ Attempts: <span style={{ fontVariantNumeric: "tabular-nums" }}>{submissions}</sp
 </div>
 
 
-{/* DEBUG: didWin={String(didWin)} submissions={String(submissions)} */}
+{/* DEBUG v2: didWin={String(didWin)} submissions={String(submissions)} */}
 {didWin && submissions < 20 && (
 
 <div style={{

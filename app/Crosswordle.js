@@ -5731,7 +5731,11 @@ className="mt-0 mb-2 font-semibold text-center translate-y-1"
 style={{ color: isPurpleBg ? "#ffffff" : "#374151", fontSize: `${Math.round(14 * uiScale)}px` }}
 
 >
-    Attempts: <span className="tabular-nums">{submissions}</span>
+    
+	
+	Attempts: <span style={{ fontVariantNumeric: "tabular-nums" }}>{submissions}</span>
+	
+	
   </div>
 </div>
 

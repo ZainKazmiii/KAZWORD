@@ -6929,7 +6929,10 @@ style={{ marginTop: 0, fontSize: Math.round(14 * Math.max(1, uiScale)), fontWeig
 
 Attempts: <span style={{ fontVariantNumeric: "tabular-nums" }}>{submissions}</span>
 </div>
-{didWin && submissions < 20 && (
+
+{didWin && submissions > 0 && submissions < 20 && (
+
+
 <div style={{
 marginTop: Math.round(16 * Math.max(1, uiScale)),
 display: "flex",
@@ -6952,7 +6955,9 @@ try {
 const res = await fetch("/api/generate-token", {
 method: "POST",
 headers: { "Content-Type": "application/json" },
-body: JSON.stringify({ submissions, puzzleNumber }),
+
+body: JSON.stringify({ submissions: Number(submissions), puzzleNumber: Number(puzzleNumber) }),
+
 });
 const d = await res.json();
 if (d.token && d.sessionId) {

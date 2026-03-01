@@ -5158,11 +5158,16 @@ html, body {
 
 
 
-
+@keyframes kazSparkleBtn {
+0% { background-position: 0% 50%; }
+50% { background-position: 100% 50%; }
+100% { background-position: 0% 50%; }
+}
+@keyframes cw-flip {
 
   
   
-         @keyframes cw-flip {
+         
 		  0%   { transform: rotateX(0deg); background: var(--fromBg); border-color: var(--fromBorder); color: var(--fromText); }
 		  49%  { transform: rotateX(90deg); background: var(--fromBg); border-color: var(--fromBorder); color: var(--fromText); }
 		  50%  { transform: rotateX(90deg); background: var(--toBg);   border-color: var(--toBorder);   color: var(--toText); }
@@ -6914,8 +6919,72 @@ Congratulations!
 <div
 style={{ marginTop: 0, fontSize: Math.round(14 * Math.max(1, uiScale)), fontWeight: 600, color: "#374151", textAlign: "center" }}
 >
+
+
+
+
 Attempts: <span style={{ fontVariantNumeric: "tabular-nums" }}>{submissions}</span>
 </div>
+{didWin && submissions < 20 && (
+<div style={{
+marginTop: Math.round(16 * Math.max(1, uiScale)),
+display: "flex",
+flexDirection: "column",
+alignItems: "center",
+gap: 8,
+}}>
+<div style={{
+fontSize: Math.round(12 * Math.max(1, uiScale)),
+fontWeight: 700,
+color: "#6b7280",
+textAlign: "center",
+letterSpacing: "0.04em",
+}}>
+✨ TOP SOLVER ✨
+</div>
+<button
+onClick={async () => {
+try {
+const res = await fetch("/api/generate-token", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({ submissions, puzzleNumber }),
+});
+const d = await res.json();
+if (d.token && d.sessionId) {
+localStorage.setItem(`kzw_session_${d.token}`, d.sessionId);
+window.open(`/reward?token=${d.token}`, "_blank", "noopener,noreferrer");
+}
+} catch (e) {
+alert("Something went wrong. Please try again.");
+}
+}}
+style={{
+background: "linear-gradient(135deg, #f59e0b, #ef4444, #8b5cf6)",
+backgroundSize: "300% 300%",
+animation: "kazSparkleBtn 3s ease infinite",
+color: "white",
+fontWeight: 900,
+fontSize: Math.round(14 * Math.max(1, uiScale)),
+border: "none",
+borderRadius: Math.round(12 * Math.max(1, uiScale)),
+padding: `${Math.round(10 * Math.max(1, uiScale))}px ${Math.round(20 * Math.max(1, uiScale))}px`,
+cursor: "pointer",
+boxShadow: "0 0 18px rgba(245,158,11,0.5)",
+letterSpacing: "0.04em",
+}}
+>
+🌟 Claim Your Reward
+</button>
+<div style={{
+fontSize: Math.round(11 * Math.max(1, uiScale)),
+color: "#9ca3af",
+textAlign: "center",
+}}>
+Solved in {submissions} — you're in the top tier!
+</div>
+</div>
+)}
   
   
   

@@ -6952,8 +6952,11 @@ letterSpacing: "0.04em",
 ✨ TOP SOLVER ✨
 </div>
 <button
+
+
 onClick={async () => {
 try {
+const newTab = window.open("", "_blank");
 const res = await fetch("/api/generate-token", {
 method: "POST",
 headers: { "Content-Type": "application/json" },
@@ -6962,12 +6965,19 @@ body: JSON.stringify({ submissions, puzzleNumber }),
 const d = await res.json();
 if (d.token && d.sessionId) {
 localStorage.setItem(`kzw_session_${d.token}`, d.sessionId);
-window.open(`/reward?token=${d.token}`, "_blank", "noopener,noreferrer");
+newTab.location.href = `/reward?token=${d.token}`;
+} else {
+newTab.close();
+alert("Something went wrong. Please try again.");
 }
 } catch (e) {
+if (typeof newTab !== "undefined") newTab.close();
 alert("Something went wrong. Please try again.");
 }
 }}
+
+
+
 style={{
 background: "linear-gradient(135deg, #f59e0b, #ef4444, #8b5cf6)",
 backgroundSize: "300% 300%",

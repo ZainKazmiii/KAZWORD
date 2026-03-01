@@ -6867,11 +6867,16 @@ style={{
 color: WORDLE.textDark,
 maxWidth: Math.round(420 * Math.max(1, uiScale)),
 maxHeight: "calc(100vh - 32px)",
+
+
 overflow: "hidden",
 display: "flex",
 flexDirection: "column",
 position: "relative",
 padding: Math.round(18 * Math.max(1, uiScale)),
+overflowY: "auto",
+
+
 fontSize: Math.round(14 * Math.max(1, uiScale)),
 
 
@@ -6925,7 +6930,11 @@ style={{ marginTop: 0, fontSize: Math.round(14 * Math.max(1, uiScale)), fontWeig
 
 Attempts: <span style={{ fontVariantNumeric: "tabular-nums" }}>{submissions}</span>
 </div>
+
+
+{/* DEBUG: didWin={String(didWin)} submissions={String(submissions)} */}
 {didWin && submissions < 20 && (
+
 <div style={{
 marginTop: Math.round(16 * Math.max(1, uiScale)),
 display: "flex",

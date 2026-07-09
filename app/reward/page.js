@@ -32,9 +32,15 @@ const [creatorName, setCreatorName] = useState("");
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
-    if (!token) { setStatus("invalid"); return; }
+    if (!token) {
+      const timeoutId = window.setTimeout(() => setStatus("invalid"), 0);
+      return () => window.clearTimeout(timeoutId);
+    }
     const sessionId = localStorage.getItem(`kzw_session_${token}`);
-    if (!sessionId) { setStatus("invalid"); return; }
+    if (!sessionId) {
+      const timeoutId = window.setTimeout(() => setStatus("invalid"), 0);
+      return () => window.clearTimeout(timeoutId);
+    }
     fetch("/api/validate-token", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -159,7 +165,7 @@ const wordList = words.trim().replace(/[.,]+$/, "").split(",").map((w) => w.trim
   </svg>
 </div>
         <div style={{ fontSize: s(20), fontWeight: 900, color: "#111827", marginBottom: s(8) }}>Thank You!</div>
-        <div style={{ fontSize: s(14), color: "#111827", lineHeight: 1.6 }}>Your puzzle suggestion has been submitted. If your puzzle gets chosen, you'll be notified on the platform you selected with the date that it'll be featured!</div>
+        <div style={{ fontSize: s(14), color: "#111827", lineHeight: 1.6 }}>Your puzzle suggestion has been submitted. If your puzzle gets chosen, you&apos;ll be notified on the platform you selected with the date that it&apos;ll be featured!</div>
 
 
 
@@ -191,7 +197,7 @@ const wordList = words.trim().replace(/[.,]+$/, "").split(",").map((w) => w.trim
 
 			<div>
               <label style={{ fontSize: s(13), fontWeight: 700, color: "#374151", display: "block", marginBottom: s(4) }}>1. Your name:</label>
-              <div style={{ fontSize: s(11), color: "#6b7280", marginBottom: s(6) }}>This is how you'll be credited if your puzzle gets featured. Last name is optional.</div>
+              <div style={{ fontSize: s(11), color: "#6b7280", marginBottom: s(6) }}>This is how you&apos;ll be credited if your puzzle gets featured. Last name is optional.</div>
               <input
                 value={creatorName}
                 onChange={(e) => setCreatorName(e.target.value)}

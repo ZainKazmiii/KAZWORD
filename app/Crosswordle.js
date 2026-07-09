@@ -5689,7 +5689,7 @@ function HoldToUnlockSlot({
 
   const tick = React.useCallback(
 
-    (t) => {
+    function tickFrame(t) {
 
       if (!startRef.current) startRef.current = t;
 
@@ -5711,7 +5711,7 @@ function HoldToUnlockSlot({
 
       }
 
-      rafRef.current = requestAnimationFrame(tick);
+      rafRef.current = requestAnimationFrame(tickFrame);
 
     },
 
@@ -5733,7 +5733,7 @@ function HoldToUnlockSlot({
 
     }, START_DELAY_MS);
 
-  }, [locked, disabled, tick]);
+  }, [START_DELAY_MS, locked, disabled, tick]);
 
 
 
@@ -14875,7 +14875,7 @@ color: isPurpleBg ? "#fff" : "#4c1d95",
 
       <div style={{ fontSize: 14, color: "#374151", lineHeight: 1.6, textAlign: "center" }}>
 
-        You haven't filled the entire grid yet. For the best shot at winning, try filling in <strong>the full grid</strong> before submitting.<br/>You can submit multiple words at once!
+        You haven&apos;t filled the entire grid yet. For the best shot at winning, try filling in <strong>the full grid</strong> before submitting.<br/>You can submit multiple words at once!
 
       </div>
 
@@ -17491,7 +17491,7 @@ boxShadow: "0 0 12px rgba(245,158,11,0.25)",
 
 <div style={{ fontSize: Math.round(12 * Math.max(1, uiScale)), color: "#78350f", fontWeight: 600, lineHeight: 1.4 }}>
 
-Today's puzzle was inspired by <strong>{cr.name}</strong> who submitted this idea after solving Kazword #{cr.solvedOn} in just {cr.attempts} attempt{cr.attempts !== 1 ? "s" : ""}!
+Today&apos;s puzzle was inspired by <strong>{cr.name}</strong> who submitted this idea after solving Kazword #{cr.solvedOn} in just {cr.attempts} attempt{cr.attempts !== 1 ? "s" : ""}!
 
 </div>
 
@@ -18062,6 +18062,5 @@ gap: Math.round(10 * Math.max(1, uiScale)),
   );
 
 }
-
 
 

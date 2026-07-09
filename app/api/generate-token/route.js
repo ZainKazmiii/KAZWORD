@@ -18,7 +18,7 @@ export async function POST(request) {
     if (!submissions || !puzzleNumber) {
       return NextResponse.json({ error: "Missing data" }, { status: 400 });
     }
-    if (submissions >= 20) {
+    if (submissions > 10) {
       return NextResponse.json({ error: "Not eligible" }, { status: 403 });
     }
     const token = generateToken();

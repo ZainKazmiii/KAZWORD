@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kazwordi Shape Maker (row, col)</title>
+  <style>
+    :root{
+      --bg:#f6f7f8; --tile:#ffffff; --on:#111827; --grid:#d3d6da; --text:#111827;
+      --soft:#e5e7eb; --accent:#2563eb;
+    }
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text);}
+    .wrap{max-width:980px;margin:0 auto;padding:24px 16px;}
+    h1{margin:0 0 6px;font-size:18px;font-weight:700;text-align:center;}
+    .sub{margin:0 0 18px;text-align:center;color:#6b7280;font-size:13px;}
+    .panel{
+      display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:center;
+      margin:0 0 14px;
+    }
+    .ctrl{
+      background:#fff;border:1px solid var(--soft);border-radius:12px;padding:10px 12px;
+      display:flex; gap:10px; align-items:center;
+      box-shadow:0 1px 0 rgba(0,0,0,.03);
+    }
+    label{font-size:12px;color:#4b5563;}
+    input[type="number"]{
+      width:70px;padding:8px 8px;border-radius:10px;border:1px solid var(--soft);outline:none;
+      font-size:13px;background:#fff;
+    }
+    button{
+      border:1px solid var(--soft); background:#fff; padding:9px 12px; border-radius:12px;
+      font-weight:600; cursor:pointer;
+    }
+    button.primary{border-color:transparent;background:var(--accent);color:#fff;}
+    button:active{transform:translateY(1px);}
+    .main{
+      display:grid; grid-template-columns: 1fr 360px; gap:14px; align-items:start;
+    }
+    @media (max-width: 900px){ .main{grid-template-columns:1fr; } }
+    .board{
+      background:#fff;border:1px solid var(--soft);border-radius:16px;padding:14px;
+      box-shadow:0 1px 0 rgba(0,0,0,.03);
+      display:flex; justify-content:center;
+    }
+    .grid{
+      display:grid;
+      gap:6px;
+      user-select:none;
+      touch-action:manipulation;
+    }
+    .tile{
+      width:42px;height:42px;border-radius:10px;
+      border:2px solid var(--grid);
+      background:var(--tile);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;color:#111827;
+    }
+    .tile.on{
+      background:#111827;
+      border-color:#111827;
+      color:#fff;
+    }
+    .tile:hover{box-shadow:0 0 0 3px rgba(37,99,235,.15);}
+    .side{
+      background:#fff;border:1px solid var(--soft);border-radius:16px;padding:14px;
+      box-shadow:0 1px 0 rgba(0,0,0,.03);
+    }
+    .side h2{margin:0 0 8px;font-size:14px;}
+    textarea{
+      width:100%;min-height:220px;resize:vertical;
+      border:1px solid var(--soft);border-radius:12px;padding:10px;
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:12.5px; line-height:1.4;
+      outline:none;
+    }
+    .hint{font-size:12px;color:#6b7280;margin-top:8px;}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+    .pill{
+      font-size:12px;color:#374151;background:#f3f4f6;border:1px solid var(--soft);
+      padding:6px 10px;border-radius:999px;
+    }
+    .mini{font-size:12px;color:#6b7280;margin-top:10px;}
+    .kbd{font-family:ui-monospace, monospace;background:#f3f4f6;border:1px solid #e5e7eb;border-bottom-width:2px;padding:1px 6px;border-radius:8px;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Kazwordi Shape Maker</h1>
+    <p class="sub">Click tiles to toggle. Export/import as <b>(row, col)</b> coordinates.</p>
+
+    <div class="panel">
+      <div class="ctrl">
+        <div>
+          <label>Rows</label><br/>
+          <input id="rows" type="number" min="1" max="40" value="9">
+        </div>
+        <div>
+          <label>Cols</label><br/>
+          <input id="cols" type="number" min="1" max="40" value="9">
+        </div>
+        <div>
+          <label>Tile px</label><br/>
+          <input id="tileSize" type="number" min="24" max="72" value="42">
+        </div>
+        <button id="apply" class="primary">Apply</button>
+      </div>
+
+      <div class="ctrl">
+        <button id="clear">Clear</button>
+        <button id="invert">Invert</button>
+        <button id="copy">Copy coords</button>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="board">
+        <div id="grid" class="grid" aria-label="grid"></div>
+      </div>
+
+      <div class="side">
+        <h2>Coordinates (row, col)</h2>
+        <textarea id="coords" spellcheck="false"></textarea>
+        <div class="row">
+          <button id="load">Load from textarea</button>
+          <button id="asJson">As JSON array</button>
+        </div>
+        <div class="hint">
+          Format supported:
+          <div class="mini">
+            • One per line: <span class="kbd">3,5</span><br/>
+            • Or pairs: <span class="kbd">(3,5) (3,6)</span><br/>
+            • Or JSON: <span class="kbd">[[3,5],[3,6]]</span>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px;">
+          <span id="count" class="pill">0 tiles on</span>
+          <span id="dims" class="pill">9×9</span>
+        </div>
+
+        <div class="mini" style="margin-top:12px;">
+          Tips: drag to paint • hold <span class="kbd">Shift</span> to erase while dragging
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const elRows = document.getElementById("rows");
+  const elCols = document.getElementById("cols");
+  const elTileSize = document.getElementById("tileSize");
+  const elApply = document.getElementById("apply");
+  const elGrid = document.getElementById("grid");
+  const elCoords = document.getElementById("coords");
+  const elCount = document.getElementById("count");
+  const elDims = document.getElementById("dims");
+
+  const btnClear = document.getElementById("clear");
+  const btnInvert = document.getElementById("invert");
+  const btnCopy = document.getElementById("copy");
+  const btnLoad = document.getElementById("load");
+  const btnAsJson = document.getElementById("asJson");
+
+  // State: rows, cols, and a Set of "r,c" strings (0-index internally)
+  let R = parseInt(elRows.value, 10);
+  let C = parseInt(elCols.value, 10);
+  let tilePx = parseInt(elTileSize.value, 10);
+  let on = new Set();
+
+  // Drag painting
+  let isMouseDown = false;
+  let dragMode = null; // "paint" or "erase"
+
+  function key(r, c){ return `${r},${c}`; }
+
+  function renderGrid(){
+    // CSS grid sizing
+    elGrid.style.gridTemplateColumns = `repeat(${C}, ${tilePx}px)`;
+    elGrid.style.gridTemplateRows = `repeat(${R}, ${tilePx}px)`;
+    elGrid.style.gap = Math.max(4, Math.floor(tilePx/8)) + "px";
+
+    elGrid.innerHTML = "";
+    for(let r=0;r<R;r++){
+      for(let c=0;c<C;c++){
+        const d = document.createElement("div");
+        d.className = "tile" + (on.has(key(r,c)) ? " on" : "");
+        d.dataset.r = r;
+        d.dataset.c = c;
+        // Optional tiny coordinate labels (comment out if you hate it)
+        // d.textContent = `${r+1},${c+1}`;
+        d.addEventListener("mousedown", (e) => {
+          isMouseDown = true;
+          const erase = e.shiftKey;
+          dragMode = erase ? "erase" : "paint";
+          toggleCell(r, c, dragMode === "paint");
+        });
+        d.addEventListener("mouseenter", (e) => {
+          if(!isMouseDown) return;
+          const erase = e.shiftKey || dragMode === "erase";
+          toggleCell(r, c, !erase);
+        });
+        elGrid.appendChild(d);
+      }
+    }
+
+    // Global mouseup
+    window.onmouseup = () => { isMouseDown = false; dragMode = null; };
+
+    updateText();
+    updateBadges();
+  }
+
+  function toggleCell(r, c, makeOn){
+    const k = key(r,c);
+    if(makeOn) on.add(k);
+    else on.delete(k);
+
+    // Update tile class without full re-render
+    const idx = r*C + c;
+    const tile = elGrid.children[idx];
+    if(tile){
+      tile.className = "tile" + (on.has(k) ? " on" : "");
+    }
+    updateText();
+    updateBadges();
+  }
+
+  function updateBadges(){
+    elCount.textContent = `${on.size} tiles on`;
+    elDims.textContent = `${R}×${C}`;
+  }
+
+  // Export as 1-indexed (row,col) by default, because that’s how humans think.
+function exportCoords(){
+  const pairs = [...on].map(s => s.split(",").map(n => parseInt(n,10)));
+  pairs.sort((a,b) => (a[0]-b[0]) || (a[1]-b[1]));
+  // 0-index output
+  return pairs.map(([r,c]) => `${r},${c}`).join("\n");
+}
+
+
+  function exportJson(){
+  const pairs = [...on].map(s => s.split(",").map(n => parseInt(n,10)));
+  pairs.sort((a,b) => (a[0]-b[0]) || (a[1]-b[1]));
+  return JSON.stringify(pairs); // 0-index
+}
+
+
+  function updateText(){
+    elCoords.value = exportCoords();
+  }
+
+  function clearAll(){
+    on.clear();
+    renderGrid();
+  }
+
+  function invertAll(){
+    const next = new Set();
+    for(let r=0;r<R;r++){
+      for(let c=0;c<C;c++){
+        const k = key(r,c);
+        if(!on.has(k)) next.add(k);
+      }
+    }
+    on = next;
+    renderGrid();
+  }
+
+  function parseInput(text){
+    text = (text || "").trim();
+    if(!text) return [];
+
+    // Try JSON first
+    if(text.startsWith("[")){
+      try{
+        const arr = JSON.parse(text);
+        if(Array.isArray(arr)){
+          return arr
+            .filter(x => Array.isArray(x) && x.length >= 2)
+            .map(([r,c]) => [Number(r), Number(c)])
+            .filter(([r,c]) => Number.isFinite(r) && Number.isFinite(c));
+        }
+      }catch{}
+    }
+
+    // Otherwise: grab numbers in pairs from anything like "(3,5) 3,5 3 5"
+    const nums = text.match(/-?\d+/g);
+    if(!nums) return [];
+    const out = [];
+    for(let i=0;i<nums.length-1;i+=2){
+      out.push([parseInt(nums[i],10), parseInt(nums[i+1],10)]);
+    }
+    return out;
+  }
+
+  function loadFromTextarea(){
+    const pairs = parseInput(elCoords.value);
+
+    // Assume user input is 1-indexed; convert to 0-index
+    // Assume user input is 0-indexed
+	const next = new Set();
+	for(const [r, c] of pairs){
+	  if(r>=0 && r<R && c>=0 && c<C){
+		next.add(key(r,c));
+	  }
+	}
+
+    on = next;
+    renderGrid();
+  }
+
+  async function copyCoords(){
+    const text = exportCoords();
+    try{
+      await navigator.clipboard.writeText(text);
+      btnCopy.textContent = "Copied!";
+      setTimeout(() => btnCopy.textContent = "Copy coords", 900);
+    }catch{
+      // fallback: select textarea
+      elCoords.focus();
+      elCoords.select();
+      document.execCommand("copy");
+      btnCopy.textContent = "Copied!";
+      setTimeout(() => btnCopy.textContent = "Copy coords", 900);
+    }
+  }
+
+  function applySettings(){
+    const nr = Math.max(1, Math.min(40, parseInt(elRows.value,10) || 9));
+    const nc = Math.max(1, Math.min(40, parseInt(elCols.value,10) || 9));
+    const np = Math.max(24, Math.min(72, parseInt(elTileSize.value,10) || 42));
+
+    R = nr; C = nc; tilePx = np;
+
+    // Remove out-of-bounds cells
+    const next = new Set();
+    for(const s of on){
+      const [r,c] = s.split(",").map(n => parseInt(n,10));
+      if(r>=0 && r<R && c>=0 && c<C) next.add(s);
+    }
+    on = next;
+    renderGrid();
+  }
+
+  elApply.addEventListener("click", applySettings);
+  btnClear.addEventListener("click", clearAll);
+  btnInvert.addEventListener("click", invertAll);
+  btnCopy.addEventListener("click", copyCoords);
+  btnLoad.addEventListener("click", loadFromTextarea);
+  btnAsJson.addEventListener("click", () => {
+    elCoords.value = exportJson();
+  });
+
+  // initial render
+  renderGrid();
+})();
+</script>
+</body>
+</html>

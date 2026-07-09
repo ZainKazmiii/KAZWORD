@@ -8,8 +8,11 @@ const redis = new Redis({
 
 export async function POST(request) {
   try {
-    const { token, sessionId, theme, words, notifyMethod, username } =
+
+
+	const { token, sessionId, theme, words, notifyMethod, username, creatorName } =
       await request.json();
+
     if (!token || !sessionId) {
       return NextResponse.json({ success: false, reason: "missing" });
     }
@@ -28,15 +31,20 @@ export async function POST(request) {
     data.used = true;
     await redis.set(`token:${token}`, JSON.stringify(data), { ex: 172800 });
     // Save submission
-    const submission = {
+
+
+
+	const submission = {
       puzzleNumber: data.puzzleNumber,
       submissions: data.submissions,
+      creatorName,
       theme,
       words,
       notifyMethod,
       username,
       submittedAt: new Date().toISOString(),
     };
+
     await redis.lpush("submissions", JSON.stringify(submission));
     return NextResponse.json({ success: true });
   } catch (e) {

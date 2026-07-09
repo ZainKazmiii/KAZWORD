@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Kazword
 
-## Getting Started
+Kazword is a web puzzle game that combines Wordle-style letter feedback with crossword-style clues and grids. It was built as a personal project to explore puzzle state, input handling, responsive layouts, and repeated user-flow testing.
 
-First, run the development server:
+## Highlights
+
+- Crossword-style puzzle grids with clue-driven word entry
+- Word-guessing feedback and keyboard interaction
+- Responsive game interface built as a Next.js application
+- Server routes for short-lived reward tokens backed by Upstash Redis
+- A standalone shape-making utility in `tools/shape-maker.html` used to design and test puzzle layouts
+
+## Stack
+
+- Next.js 16 and React 19
+- JavaScript and CSS
+- Upstash Redis
+- Vercel Analytics
+- Lucide icons
+
+## Local Setup
 
 ```bash
+npm ci
+copy .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000` after the development server starts.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+The reward-token routes need an Upstash Redis database. The puzzle interface can still be reviewed without configuring the reward flow.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment Variables
 
-## Learn More
+```text
+UPSTASH_REDIS_REST_URL
+UPSTASH_REDIS_REST_TOKEN
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+No production credentials are included in this repository.

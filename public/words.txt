@@ -75036,7 +75036,6 @@ exuded
 artemisia
 bullpen
 heliotrope
-codex
 daub
 churchgoing
 absence
@@ -104591,7 +104590,6 @@ aspiration
 croatia
 meteor
 perspex
-codex
 deck
 wagging
 version
@@ -141945,7 +141943,6 @@ lamprey
 acidifies
 semis
 kebab
-codex
 excellency
 screeding
 relics
@@ -164607,7 +164604,6 @@ parenthood
 snorted
 minorities
 sentences
-codex
 delinquents
 sores
 allergies
@@ -210823,7 +210819,6 @@ coders
 codes
 codeword
 codewords
-codex
 codfish
 codfisher
 codfishes
@@ -280656,7 +280651,6 @@ foamy
 lolly
 giver
 quipu
-codex
 manna
 vodka
 ferny
@@ -297360,7 +297354,6 @@ codas
 coded
 coder
 codes
-codex
 codon
 coeds
 cohos
@@ -316872,7 +316865,6 @@ coders
 codes
 codeword
 codewords
-codex
 codfish
 codfisher
 codger
@@ -382315,7 +382307,6 @@ codas
 coded
 coder
 codes
-codex
 codon
 coeds
 coffs
@@ -391359,7 +391350,6 @@ foamy
 lolly
 giver
 quipu
-codex
 manna
 vodka
 ferny

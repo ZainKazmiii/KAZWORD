@@ -1,5 +1,5 @@
 {
-  "name": "crosswordle",
+  "name": "kazword",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@next/third-parties": "^16.1.6",
     "@upstash/redis": "^1.36.3",
+    "@vercel/analytics": "^2.0.1",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
     "react": "19.2.3",
